@@ -1,9 +1,9 @@
 resource "aws_api_gateway_rest_api" "api_gateway" {
-  name        = "teste-avalanche"
+  name        = "avalanches"
   description = "API Gateway criado para teste"
 
   tags = {
-    Name = "teste-avalanche"
+    Name = "avalanches"
   }
 }
 
@@ -108,10 +108,9 @@ resource "aws_api_gateway_integration" "cliente_delete_integration" {
   resource_id = aws_api_gateway_resource.cliente_resource.id
   http_method = aws_api_gateway_method.cliente_delete_method.http_method
   integration_http_method = "DELETE"
-  type        = "MOCK" ## TROCAR PARA HTTP_Proxy
+  type        = "HTTP_PROXY" ## TROCAR PARA HTTP_Proxy
 
-  #Colocar uri quando aplicaçao estiver disp no eks
-  #uri         = ""
+  uri         = "https://6D3308974CC423C311935FBD5D99CB9B.gr7.sa-east-1.eks.amazonaws.com/avalanches/v1/cliente/{cpf}"
 
   request_parameters = {
     "integration.request.path.cpf" = "method.request.path.cpf"  
@@ -137,10 +136,8 @@ resource "aws_api_gateway_integration" "produto_post_integration" {
   resource_id = aws_api_gateway_resource.produto_resource.id
   http_method = aws_api_gateway_method.produto_post_method.http_method
   integration_http_method = "POST"
-  type        = "MOCK" 
-  
-  # Colocar uri quando a aplicação estiver disponível no EKS
-  ##uri         = "http://<eks>//avalanches/v1/produto"
+  type        = "HTTP_PROXY" 
+  uri         = "https://6D3308974CC423C311935FBD5D99CB9B.gr7.sa-east-1.eks.amazonaws.com/avalanches/v1/produto"
 
   request_templates = {
     "application/json" = <<EOF
@@ -154,9 +151,6 @@ resource "aws_api_gateway_integration" "produto_post_integration" {
     EOF
   }
 }
-
-
-
 
 #Produto deleçao
 resource "aws_api_gateway_method" "produto_delete_method" {
@@ -175,10 +169,10 @@ resource "aws_api_gateway_integration" "produto_delete_integration" {
   resource_id = aws_api_gateway_resource.produto_resource.id
   http_method = aws_api_gateway_method.produto_delete_method.http_method
   integration_http_method = "DELETE"
-  type        = "MOCK"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
+  type        = "HTTP_PROXY"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
   
   # Colocar uri quando a aplicação estiver disponível no EKS
-  ##uri         = "http://<eks>//avalanches/v1/produto/{id}"
+  uri         = "https://6D3308974CC423C311935FBD5D99CB9B.gr7.sa-east-1.eks.amazonaws.com/avalanches/v1/produto/{id}"
 
   request_parameters = {
     "integration.request.path.id" = "method.request.path.id"
@@ -203,16 +197,12 @@ resource "aws_api_gateway_integration" "produto_get_by_categoria_integration" {
   resource_id = aws_api_gateway_resource.produto_resource.id
   http_method = aws_api_gateway_method.produto_get_by_categoria_method.http_method
   integration_http_method = "GET"
-  type        = "MOCK"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
-  
-  # Colocar uri quando a aplicação estiver disponível no EKS
-  ##uri         = "http://<eks>//avalanches/v1/produto/categoria/{categoriaProduto}"
-
+  type        = "HTTP_PROXY"  
+  uri         = "https://6D3308974CC423C311935FBD5D99CB9B.gr7.sa-east-1.eks.amazonaws.com/avalanches/v1/produto/categoria/{categoriaProduto}"
   request_parameters = {
     "integration.request.path.categoriaProduto" = "method.request.path.categoriaProduto"
   }
 }
-
 
 # Atualizar produto
 
@@ -221,7 +211,6 @@ resource "aws_api_gateway_method" "produto_put_method" {
   resource_id   = aws_api_gateway_resource.produto_resource.id
   http_method   = "PUT"
   authorization = "NONE"
-
   request_parameters = {
     "method.request.path.id" = true
   }
@@ -233,10 +222,10 @@ resource "aws_api_gateway_integration" "produto_put_integration" {
   resource_id = aws_api_gateway_resource.produto_resource.id
   http_method = aws_api_gateway_method.produto_put_method.http_method
   integration_http_method = "PUT"
-  type        = "MOCK"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
+  type        = "HTTP_PROXY"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
 
   # Colocar uri quando a aplicação estiver disponível no EKS
-  ##uri         = "http://<eks>//avalanches/v1/produto/{id}"
+  uri         = "https://6D3308974CC423C311935FBD5D99CB9B.gr7.sa-east-1.eks.amazonaws.com/avalanches/v1/produto/{id}"
 
   request_parameters = {
     "integration.request.path.id" = "method.request.path.id"
@@ -274,10 +263,8 @@ resource "aws_api_gateway_integration" "pedido_post_integration" {
   resource_id = aws_api_gateway_resource.pedido_resource.id
   http_method = aws_api_gateway_method.pedido_post_method.http_method
   integration_http_method = "POST"
-  type        = "MOCK"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
-  
-  # Colocar uri quando a aplicação estiver disponível no EKS
-  ##uri         = "http://<eks>//avalanches/v1/pedido"
+  type        = "HTTP_PROXY"  
+  uri         = "https://6D3308974CC423C311935FBD5D99CB9B.gr7.sa-east-1.eks.amazonaws.com/avalanches/v1/pedido"
 
   request_templates = {
     "application/json" = <<EOF
@@ -316,10 +303,8 @@ resource "aws_api_gateway_integration" "pedido_put_status_integration" {
   resource_id = aws_api_gateway_resource.pedido_resource.id
   http_method = aws_api_gateway_method.pedido_put_status_method.http_method
   integration_http_method = "PUT"
-  type        = "MOCK"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
-  
-  # Colocar uri quando a aplicação estiver disponível no EKS
-  ##uri         = "http://<eks>//avalanches/v1/pedido/{idPedido}"
+  type        = "HTTP_PROXY"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
+  uri         = "https://6D3308974CC423C311935FBD5D99CB9B.gr7.sa-east-1.eks.amazonaws.com/avalanches/v1/pedido/{idPedido}"
 
   request_parameters = {
     "integration.request.path.idPedido" = "method.request.path.idPedido"
@@ -334,8 +319,6 @@ resource "aws_api_gateway_integration" "pedido_put_status_integration" {
   }
 }
 
-##  LISTAR pedido
-
 resource "aws_api_gateway_method" "pedido_get_list_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.pedido_resource.id
@@ -348,18 +331,10 @@ resource "aws_api_gateway_integration" "pedido_get_list_integration" {
   resource_id = aws_api_gateway_resource.pedido_resource.id
   http_method = aws_api_gateway_method.pedido_get_list_method.http_method
   integration_http_method = "GET"
-  type        = "MOCK"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
-  
-  # Colocar uri quando a aplicação estiver disponível no EKS
-  ##uri         = "http://<eks>//avalanches/v1/pedido"
+  type        = "HTTP_PROXY"  
+  uri         = "https://6D3308974CC423C311935FBD5D99CB9B.gr7.sa-east-1.eks.amazonaws.com/avalanches/v1/pedido"
 
-  # request_parameters = {
-  #   # Se houver parâmetros de consulta, adicione aqui
-  # }
 }
-
-
-## colar aqui
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [aws_api_gateway_integration.mock_integration]
