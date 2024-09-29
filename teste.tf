@@ -20,8 +20,3 @@ resource "aws_route53_record" "cert_validation" {
   ttl      = 60
   records  = [each.value.resource_record_value]
 }
-
-resource "aws_api_gateway_domain_name" "avalanches_custom_domain"{
-  domain_name   = "avalanches.com"  
-  certificate_arn = aws_acm_certificate.avalanches_cert.arn
-}
