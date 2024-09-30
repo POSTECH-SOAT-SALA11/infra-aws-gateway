@@ -27,13 +27,20 @@ resource "aws_api_gateway_integration" "mock_integration" {
   type        = "MOCK"
 }
 
-##Cliente cadastro
+
 resource "aws_api_gateway_resource" "cliente_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
   path_part   = "cliente"
 }
 
+resource "aws_api_gateway_resource" "cliente_cpf_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_resource.cliente_resource.id
+  path_part   = "{cpf}"  
+}
+
+##Cliente cadastro
 resource "aws_api_gateway_method" "cliente_post_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.cliente_resource.id
@@ -62,10 +69,11 @@ resource "aws_api_gateway_integration" "cliente_post_integration" {
   }
 }
 
-## Cliente consultar
+## Cliente consultar por cpf
+
 resource "aws_api_gateway_method" "cliente_get_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
-  resource_id   = aws_api_gateway_resource.cliente_resource.id
+  resource_id   = aws_api_gateway_resource.cliente_cpf_resource.id
   http_method   = "GET"
   authorization = "NONE"
   
@@ -76,7 +84,7 @@ resource "aws_api_gateway_method" "cliente_get_method" {
 
 resource "aws_api_gateway_integration" "cliente_get_integration" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.cliente_resource.id
+  resource_id = aws_api_gateway_resource.cliente_cpf_resource.id
   http_method = aws_api_gateway_method.cliente_get_method.http_method
   integration_http_method = "GET"
   type        = "HTTP_PROXY" 
@@ -94,7 +102,7 @@ resource "aws_api_gateway_integration" "cliente_get_integration" {
 ## Cliente 
 resource "aws_api_gateway_method" "cliente_delete_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
-  resource_id   = aws_api_gateway_resource.cliente_resource.id
+  resource_id = aws_api_gateway_resource.cliente_cpf_resource.id
   http_method   = "DELETE"
   authorization = "NONE"
   
@@ -105,7 +113,7 @@ resource "aws_api_gateway_method" "cliente_delete_method" {
 
 resource "aws_api_gateway_integration" "cliente_delete_integration" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.cliente_resource.id
+  resource_id = aws_api_gateway_resource.cliente_cpf_resource.id
   http_method = aws_api_gateway_method.cliente_delete_method.http_method
   integration_http_method = "DELETE"
   type        = "HTTP_PROXY" ## TROCAR PARA HTTP_Proxy
@@ -118,12 +126,20 @@ resource "aws_api_gateway_integration" "cliente_delete_integration" {
 
 }
 
-# Produto cadastro
+# Produto resources
 resource "aws_api_gateway_resource" "produto_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
   path_part   = "produto"
 }
+
+resource "aws_api_gateway_resource" "produto_id_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_resource.produto_resource.id  
+  path_part   = "{id}"  
+}
+
+# Produto cadastro
 resource "aws_api_gateway_method" "produto_post_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.produto_resource.id
@@ -155,7 +171,7 @@ resource "aws_api_gateway_integration" "produto_post_integration" {
 #Produto deleçao
 resource "aws_api_gateway_method" "produto_delete_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
-  resource_id   = aws_api_gateway_resource.produto_resource.id
+  resource_id   = aws_api_gateway_resource.produto_id_resource.id
   http_method   = "DELETE"
   authorization = "NONE"
 
@@ -166,7 +182,7 @@ resource "aws_api_gateway_method" "produto_delete_method" {
 
 resource "aws_api_gateway_integration" "produto_delete_integration" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.produto_resource.id
+  resource_id = aws_api_gateway_resource.produto_id_resource.id
   http_method = aws_api_gateway_method.produto_delete_method.http_method
   integration_http_method = "DELETE"
   type        = "HTTP_PROXY"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
@@ -183,7 +199,7 @@ resource "aws_api_gateway_integration" "produto_delete_integration" {
 #Produto busca por categoria
 resource "aws_api_gateway_method" "produto_get_by_categoria_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
-  resource_id   = aws_api_gateway_resource.produto_resource.id
+  resource_id   = aws_api_gateway_resource.produto_id_resource.id
   http_method   = "GET"
   authorization = "NONE"
 
@@ -194,7 +210,7 @@ resource "aws_api_gateway_method" "produto_get_by_categoria_method" {
 
 resource "aws_api_gateway_integration" "produto_get_by_categoria_integration" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.produto_resource.id
+  resource_id = aws_api_gateway_resource.produto_id_resource.id
   http_method = aws_api_gateway_method.produto_get_by_categoria_method.http_method
   integration_http_method = "GET"
   type        = "HTTP_PROXY"  
@@ -208,7 +224,7 @@ resource "aws_api_gateway_integration" "produto_get_by_categoria_integration" {
 
 resource "aws_api_gateway_method" "produto_put_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
-  resource_id   = aws_api_gateway_resource.produto_resource.id
+  resource_id   = aws_api_gateway_resource.produto_id_resource.id
   http_method   = "PUT"
   authorization = "NONE"
   request_parameters = {
@@ -219,7 +235,7 @@ resource "aws_api_gateway_method" "produto_put_method" {
 
 resource "aws_api_gateway_integration" "produto_put_integration" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.produto_resource.id
+  resource_id = aws_api_gateway_resource.produto_id_resource.id
   http_method = aws_api_gateway_method.produto_put_method.http_method
   integration_http_method = "PUT"
   type        = "HTTP_PROXY"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
@@ -244,13 +260,19 @@ resource "aws_api_gateway_integration" "produto_put_integration" {
   }
 }
 
-
-# cadastro pedido
 resource "aws_api_gateway_resource" "pedido_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
   path_part   = "pedido"
 }
+
+resource "aws_api_gateway_resource" "pedido_id_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_resource.pedido_resource.id  
+  path_part   = "{idPedido}"  
+}
+
+# cadastro pedido
 resource "aws_api_gateway_method" "pedido_post_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.pedido_resource.id
@@ -289,7 +311,7 @@ resource "aws_api_gateway_integration" "pedido_post_integration" {
 ## atualiza status pedido
 resource "aws_api_gateway_method" "pedido_put_status_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
-  resource_id   = aws_api_gateway_resource.pedido_resource.id
+  resource_id   = aws_api_gateway_resource.pedido_id_resource.id
   http_method   = "PUT"
   authorization = "NONE"
 
@@ -300,10 +322,10 @@ resource "aws_api_gateway_method" "pedido_put_status_method" {
 
 resource "aws_api_gateway_integration" "pedido_put_status_integration" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  resource_id = aws_api_gateway_resource.pedido_resource.id
+  resource_id = aws_api_gateway_resource.pedido_id_resource.id
   http_method = aws_api_gateway_method.pedido_put_status_method.http_method
   integration_http_method = "PUT"
-  type        = "HTTP_PROXY"  # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
+  type        = "HTTP_PROXY"  
   uri         = "https://6D3308974CC423C311935FBD5D99CB9B.gr7.sa-east-1.eks.amazonaws.com/avalanches/v1/pedido/{idPedido}"
 
   request_parameters = {
