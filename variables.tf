@@ -10,6 +10,6 @@ variable "s3_backend_bucket_name" {
 
 variable "url_base" {
   description = "url base aplicaçao eks"
-  type = string
-  default = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1"
+  type        = string
+  default     = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1"
 }
