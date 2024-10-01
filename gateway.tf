@@ -359,7 +359,7 @@ resource "aws_api_gateway_integration" "pedido_get_list_integration" {
 }
 
 resource "aws_api_gateway_deployment" "api_deployment" {
-  depends_on = [aws_api_gateway_integration.mock_integration]
+  depends_on = [aws_api_gateway_integration.cliente_post_integration]
 
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   stage_name  = "prod"
