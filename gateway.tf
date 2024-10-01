@@ -60,7 +60,7 @@ resource "aws_api_gateway_integration" "cliente_post_integration" {
   type                    = "HTTP_PROXY"
 
   # Colocar uri quando aplicaçao estiver disp no eks
-  uri = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/cliente"
+  uri = "${var.url_base}/cliente"
 
   request_templates = {
     "application/json" = <<EOF
@@ -94,7 +94,7 @@ resource "aws_api_gateway_integration" "cliente_get_integration" {
   type                    = "HTTP_PROXY"
 
   # Colocar uri quando aplicaçao estiver disp no eks
-  uri = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/cliente/{cpf}"
+  uri = "${var.url_base}/cliente/{cpf}"
   tls_config {
     insecure_skip_verification = true
   }
@@ -111,7 +111,8 @@ resource "aws_api_gateway_method" "cliente_delete_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.cliente_cpf_resource.id
   http_method   = "DELETE"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.lambda_authorizer_clientes.id
 
   request_parameters = {
     "method.request.path.cpf" = true
@@ -125,7 +126,7 @@ resource "aws_api_gateway_integration" "cliente_delete_integration" {
   integration_http_method = "DELETE"
   type                    = "HTTP_PROXY" ## TROCAR PARA HTTP_Proxy
 
-  uri = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/cliente/{cpf}/excluir"
+  uri = "${var.url_base}/cliente/{cpf}/excluir"
 
   request_parameters = {
     "integration.request.path.cpf" = "method.request.path.cpf"
@@ -151,7 +152,8 @@ resource "aws_api_gateway_method" "produto_post_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.produto_resource.id
   http_method   = "POST"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.lambda_authorizer_funcionarios.id
 }
 
 resource "aws_api_gateway_integration" "produto_post_integration" {
@@ -160,7 +162,7 @@ resource "aws_api_gateway_integration" "produto_post_integration" {
   http_method             = aws_api_gateway_method.produto_post_method.http_method
   integration_http_method = "POST"
   type                    = "HTTP_PROXY"
-  uri                     = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/produto"
+  uri                     = "${var.url_base}/produto"
 
   request_templates = {
     "application/json" = <<EOF
@@ -196,7 +198,7 @@ resource "aws_api_gateway_integration" "produto_delete_integration" {
   type                    = "HTTP_PROXY" # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
 
   # Colocar uri quando a aplicação estiver disponível no EKS
-  uri = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/produto/{id}"
+  uri = "${var.url_base}/produto/{id}"
 
   request_parameters = {
     "integration.request.path.id" = "method.request.path.id"
@@ -222,7 +224,7 @@ resource "aws_api_gateway_integration" "produto_get_by_categoria_integration" {
   http_method             = aws_api_gateway_method.produto_get_by_categoria_method.http_method
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
-  uri                     = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/produto/{categoriaProduto}"
+  uri                     = "${var.url_base}/produto/{categoriaProduto}"
   request_parameters = {
     "integration.request.path.categoriaProduto" = "method.request.path.categoriaProduto"
   }
@@ -234,7 +236,8 @@ resource "aws_api_gateway_method" "produto_put_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.produto_id_resource.id
   http_method   = "PUT"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.lambda_authorizer_funcionarios.id
   request_parameters = {
     "method.request.path.id" = true
   }
@@ -249,7 +252,7 @@ resource "aws_api_gateway_integration" "produto_put_integration" {
   type                    = "HTTP_PROXY" # Trocar para "HTTP_PROXY" quando a aplicação estiver disponível
 
   # Colocar uri quando a aplicação estiver disponível no EKS
-  uri = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/produto/{id}"
+  uri = "${var.url_base}/produto/{id}"
 
   request_parameters = {
     "integration.request.path.id" = "method.request.path.id"
@@ -294,7 +297,7 @@ resource "aws_api_gateway_integration" "pedido_post_integration" {
   http_method             = aws_api_gateway_method.pedido_post_method.http_method
   integration_http_method = "POST"
   type                    = "HTTP_PROXY"
-  uri                     = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/pedido"
+  uri                     = "${var.url_base}/pedido"
 
   request_templates = {
     "application/json" = <<EOF
@@ -321,7 +324,8 @@ resource "aws_api_gateway_method" "pedido_put_status_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.pedido_id_resource.id
   http_method   = "PUT"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.lambda_authorizer_funcionarios.id
 
   request_parameters = {
     "method.request.path.idPedido" = true
@@ -334,7 +338,7 @@ resource "aws_api_gateway_integration" "pedido_put_status_integration" {
   http_method             = aws_api_gateway_method.pedido_put_status_method.http_method
   integration_http_method = "PUT"
   type                    = "HTTP_PROXY"
-  uri                     = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/pedido/{idPedido}"
+  uri                     = "${var.url_base}/pedido/{idPedido}"
 
   request_parameters = {
     "integration.request.path.idPedido" = "method.request.path.idPedido"
@@ -362,9 +366,42 @@ resource "aws_api_gateway_integration" "pedido_get_list_integration" {
   http_method             = aws_api_gateway_method.pedido_get_list_method.http_method
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
-  uri                     = "http://k8s-default-ingressa-0faf251d7e-331796467.sa-east-1.elb.amazonaws.com/avalanches/v1/pedido"
+  uri                     = "${var.url_base}/pedido"
 
 }
+
+#Cadastro pagamento
+resource "aws_api_gateway_resource" "pagamento_webhook_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
+  path_part   = "webhook"
+}
+
+resource "aws_api_gateway_method" "pagamento_webhook_post_method" {
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  resource_id   = aws_api_gateway_resource.pagamento_webhook_resource.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pagamento_webhook_post_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
+  resource_id             = aws_api_gateway_resource.pagamento_webhook_resource.id
+  http_method             = aws_api_gateway_method.pagamento_webhook_post_method.http_method
+  integration_http_method = "POST"
+  type                    = "HTTP_PROXY"
+  uri                     = "${var.url_base}/pagamento/webhook"
+
+  request_templates = {
+    "application/json" = <<EOF
+    {
+      "idPedido": "$input.json('$.idPedido')",
+      "status": "$input.json('$.status')"
+    }
+    EOF
+  }
+}
+
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
@@ -377,7 +414,8 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_integration.pedido_post_integration,
     aws_api_gateway_integration.pedido_put_status_integration,
     aws_api_gateway_integration.pedido_get_list_integration,
-    aws_api_gateway_integration.cliente_delete_integration
+    aws_api_gateway_integration.cliente_delete_integration,
+    aws_api_gateway_authorizer.pagamento_webhook_post_integration
   ]
 
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
