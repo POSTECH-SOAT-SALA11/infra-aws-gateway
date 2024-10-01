@@ -151,7 +151,8 @@ resource "aws_api_gateway_method" "produto_post_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.produto_resource.id
   http_method   = "POST"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.lambda_authorizer_funcionarios.id
 }
 
 resource "aws_api_gateway_integration" "produto_post_integration" {
@@ -234,7 +235,8 @@ resource "aws_api_gateway_method" "produto_put_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.produto_id_resource.id
   http_method   = "PUT"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.lambda_authorizer_funcionarios.id
   request_parameters = {
     "method.request.path.id" = true
   }
@@ -321,7 +323,8 @@ resource "aws_api_gateway_method" "pedido_put_status_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.pedido_id_resource.id
   http_method   = "PUT"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.lambda_authorizer_funcionarios.id
 
   request_parameters = {
     "method.request.path.idPedido" = true
