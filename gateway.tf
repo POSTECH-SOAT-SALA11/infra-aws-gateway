@@ -180,7 +180,8 @@ resource "aws_api_gateway_method" "produto_delete_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.produto_id_resource.id
   http_method   = "DELETE"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.lambda_authorizer_funcionarios.id
 
   request_parameters = {
     "method.request.path.id" = true
