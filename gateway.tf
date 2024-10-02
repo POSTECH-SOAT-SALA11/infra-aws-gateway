@@ -44,6 +44,12 @@ resource "aws_api_gateway_resource" "cliente_cpf_resource" {
   path_part   = "{cpf}"
 }
 
+resource "aws_api_gateway_resource" "cliente_cpf_excluir_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_resource.cliente_resource.id
+  path_part   = "excluir"
+}
+
 ##Cliente cadastro
 resource "aws_api_gateway_method" "cliente_post_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
@@ -109,7 +115,7 @@ resource "aws_api_gateway_integration" "cliente_get_integration" {
 ## Cliente 
 resource "aws_api_gateway_method" "cliente_delete_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
-  resource_id   = aws_api_gateway_resource.cliente_cpf_resource.id
+  resource_id   = aws_api_gateway_resource.cliente_cpf_excluir_resource.id
   http_method   = "DELETE"
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.lambda_authorizer_clientes.id
