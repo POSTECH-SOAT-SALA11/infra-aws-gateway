@@ -127,18 +127,16 @@ resource "aws_api_gateway_method" "cliente_delete_method" {
 
 resource "aws_api_gateway_integration" "cliente_delete_integration" {
   rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
-  resource_id             = aws_api_gateway_resource.cliente_cpf_resource.id
+  resource_id             = aws_api_gateway_resource.cliente_cpf_excluir_resource.id
   http_method             = aws_api_gateway_method.cliente_delete_method.http_method
   integration_http_method = "DELETE"
-  type                    = "HTTP_PROXY" ## TROCAR PARA HTTP_Proxy
-
-  uri = "${var.url_base}/cliente/{cpf}/excluir"
-
+  type                    = "HTTP_PROXY"
+  uri                     = "${var.url_base}/cliente/{cpf}/excluir"
   request_parameters = {
     "integration.request.path.cpf" = "method.request.path.cpf"
   }
-
 }
+
 
 # Produto resources
 resource "aws_api_gateway_resource" "produto_resource" {
