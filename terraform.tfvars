@@ -1,2 +1,2 @@
-s3_backend_bucket_name = "tfstate-6soat"
+s3_backend_bucket_name = "6soat-tfstate"
 region                 = "sa-east-1"
