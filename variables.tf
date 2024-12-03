@@ -6,7 +6,7 @@ variable "region" {
 variable "s3_backend_bucket_name" {
   description = "Nome do bucket S3 para armazenar o estado do Terraform"
   type        = string
-  default = "6soat-tfstate"
+  default     = "6soat-tfstate"
 }
 
 variable "url_base" {
