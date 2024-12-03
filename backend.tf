@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = var.s3_backend_bucket_name
+    bucket = "6soat-tfstate"
     key    = "api-gateway/terraform.tfstate"
-    region = var.region
+    region = "sa-east-1"
   }
 }
