@@ -81,7 +81,7 @@ resource "aws_api_gateway_integration" "cliente_get_integration" {
 # Cliente: Deletar
 resource "aws_api_gateway_resource" "cliente_cpf_excluir_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  parent_id   = aws_api_gateway_resource.cliente_cpf_resource.id  # Corrigido para referir-se ao recurso pai correto
+  parent_id   = aws_api_gateway_resource.cliente_cpf_resource.id
   path_part   = "excluir"
 }
 
@@ -224,13 +224,13 @@ resource "aws_api_gateway_integration" "pagamento_webhook_post_integration" {
 
 resource "aws_api_gateway_resource" "produto_categoria_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  parent_id   = aws_api_gateway_resource.produto_resource.id  
+  parent_id   = aws_api_gateway_resource.produto_resource.id
   path_part   = "categoria"
 }
 
 resource "aws_api_gateway_method" "produto_get_by_categoria_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
-  resource_id   = aws_api_gateway_resource.produto_categoria_resource.id 
+  resource_id   = aws_api_gateway_resource.produto_categoria_resource.id
   http_method   = "GET"
   authorization = "NONE"
 
@@ -246,7 +246,7 @@ resource "aws_api_gateway_integration" "produto_get_by_categoria_integration" {
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
   uri                     = "${var.url_base}/produto/categoria/{categoriaProduto}"
-  
+
   request_parameters = {
     "integration.request.path.categoriaProduto" = "method.request.path.categoriaProduto"
   }
