@@ -81,7 +81,7 @@ resource "aws_api_gateway_integration" "cliente_get_integration" {
 # Cliente: Deletar
 resource "aws_api_gateway_resource" "cliente_cpf_excluir_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  parent_id   = aws_api_gateway_resource.cliente_cpf_resource.id  # Corrigido para referir-se ao recurso pai correto
+  parent_id   = aws_api_gateway_resource.cliente_cpf_resource.id  
   path_part   = "excluir"
 }
 
