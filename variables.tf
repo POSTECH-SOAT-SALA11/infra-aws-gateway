@@ -14,3 +14,8 @@ variable "url_base" {
   type        = string
   default     = "http://k8s-default-ingressa-0faf251d7e-890170821.sa-east-1.elb.amazonaws.com/avalanches/v1"
 }
+
+variable "lambda_cadastro_usuarios_arn" {
+  description = "ARN da função Lambda"
+  type        = string
+}
