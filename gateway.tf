@@ -406,6 +406,24 @@ resource "aws_api_gateway_integration" "pagamento_webhook_post_integration" {
   }
 }
 
+resource "aws_api_gateway_rest_api" "api" {
+  name        = "cadastro-api"
+  description = "API para cadastro de usuários"
+}
+
+resource "aws_api_gateway_resource" "cadastro" {
+  rest_api_id = aws_api_gateway_rest_api.api.id
+  parent_id   = aws_api_gateway_rest_api.api.root_resource_id
+  path_part   = "cadastro"
+}
+
+resource "aws_api_gateway_method" "cadastro_post" {
+  rest_api_id   = aws_api_gateway_rest_api.api.id
+  resource_id   = aws_api_gateway_resource.cadastro.id
+  http_method   = "POST"
+  authorization = "NONE"
+}
+
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
