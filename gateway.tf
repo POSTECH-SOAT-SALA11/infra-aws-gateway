@@ -222,6 +222,64 @@ resource "aws_api_gateway_integration" "pagamento_webhook_post_integration" {
   }
 }
 
+# Pagamento: Status
+resource "aws_api_gateway_resource" "pagamento_status_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
+  path_part   = "status"
+}
+
+resource "aws_api_gateway_resource" "pagamento_status_id_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_resource.pagamento_status_resource.id
+  path_part   = "{idPedido}"
+}
+
+resource "aws_api_gateway_method" "pagamento_status_get_method" {
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  resource_id   = aws_api_gateway_resource.pagamento_status_id_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pagamento_status_get_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
+  resource_id             = aws_api_gateway_resource.pagamento_status_id_resource.id
+  http_method             = aws_api_gateway_method.pagamento_status_get_method.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "${var.url_base}/pagamento/status/{idPedido}"
+}
+
+# Pagamento: Efetuar pagamento
+resource "aws_api_gateway_resource" "pagamento_efetuar_pagamento_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
+  path_part   = "efetuar-pagamento"
+}
+
+resource "aws_api_gateway_resource" "pagamento_efetuar_pagamento_id_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_resource.pagamento_efetuar_pagamento_resource.id
+  path_part   = "{idPedido}"
+}
+
+resource "aws_api_gateway_method" "pagamento_efetuar_pagamento_get_method" {
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  resource_id   = aws_api_gateway_resource.pagamento_efetuar_pagamento_id_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pagamento_efetuar_pagamento_get_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
+  resource_id             = aws_api_gateway_resource.pagamento_efetuar_pagamento_id_resource.id
+  http_method             = aws_api_gateway_method.pagamento_efetuar_pagamento_get_method.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "${var.url_base}/pagamento/efetuar-pagamento/{idPedido}"
+}
+
 resource "aws_api_gateway_resource" "produto_categoria_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
   parent_id   = aws_api_gateway_resource.produto_resource.id
@@ -281,6 +339,8 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_integration.pedido_post_integration,
     aws_api_gateway_integration.pedido_put_status_integration,
     aws_api_gateway_integration.pagamento_webhook_post_integration,
+    aws_api_gateway_integration.pagamento_status_get_integration,
+    aws_api_gateway_integration.pagamento_efetuar_pagamento_get_integration,
     aws_api_gateway_integration.produto_get_by_categoria_integration,
     aws_api_gateway_integration.pedido_get_list_integration
   ]
