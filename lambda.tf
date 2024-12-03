@@ -28,4 +28,5 @@ resource "aws_api_gateway_integration" "cadastro_usuario_integration" {
   integration_http_method = "POST"  
   type                    = "AWS_PROXY"
   uri                     = "arn:aws:apigateway:${var.region}:lambda:path/2015-03-31/functions/${data.aws_lambda_function.lambda_cadastro_usuarios.arn}/invocations"
+  
 }
