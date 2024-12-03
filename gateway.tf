@@ -46,7 +46,6 @@ resource "aws_api_gateway_method" "cadastro_usuario_post_method" {
   authorization = "NONE"
 }
 
-
 resource "aws_api_gateway_integration" "cliente_post_integration" {
   rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
   resource_id             = aws_api_gateway_resource.cadastro_usuario_resource.id
@@ -82,7 +81,7 @@ resource "aws_api_gateway_integration" "cliente_get_integration" {
 # Cliente: Deletar
 resource "aws_api_gateway_resource" "cliente_cpf_excluir_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
+  parent_id   = aws_api_gateway_resource.cliente_cpf_resource.id  # Corrigido para referir-se ao recurso pai correto
   path_part   = "excluir"
 }
 
@@ -205,7 +204,6 @@ resource "aws_api_gateway_method" "pagamento_webhook_post_method" {
   authorization = "NONE"
 }
 
-
 resource "aws_api_gateway_integration" "pagamento_webhook_post_integration" {
   rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
   resource_id             = aws_api_gateway_resource.pagamento_webhook_resource.id
@@ -224,39 +222,67 @@ resource "aws_api_gateway_integration" "pagamento_webhook_post_integration" {
   }
 }
 
-# resource "aws_api_gateway_rest_api" "api" {
-#   name        = "cadastro-api"
-#   description = "API para cadastro de usuários"
-# }
+resource "aws_api_gateway_resource" "produto_categoria_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_resource.produto_resource.id  
+  path_part   = "categoria"
+}
 
-# resource "aws_api_gateway_resource" "cadastro" {
-#   rest_api_id = aws_api_gateway_rest_api.api.id
-#   parent_id   = aws_api_gateway_rest_api.api.root_resource_id
-#   path_part   = "cadastro"
-# }
+resource "aws_api_gateway_method" "produto_get_by_categoria_method" {
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  resource_id   = aws_api_gateway_resource.produto_categoria_resource.id 
+  http_method   = "GET"
+  authorization = "NONE"
 
-# resource "aws_api_gateway_method" "cadastro_post" {
-#   rest_api_id   = aws_api_gateway_rest_api.api.id
-#   resource_id   = aws_api_gateway_resource.cadastro.id
-#   http_method   = "POST"
-#   authorization = "NONE"
-# }
+  request_parameters = {
+    "method.request.path.categoriaProduto" = true
+  }
+}
+
+resource "aws_api_gateway_integration" "produto_get_by_categoria_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
+  resource_id             = aws_api_gateway_resource.produto_categoria_resource.id
+  http_method             = aws_api_gateway_method.produto_get_by_categoria_method.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "${var.url_base}/produto/categoria/{categoriaProduto}"
+  
+  request_parameters = {
+    "integration.request.path.categoriaProduto" = "method.request.path.categoriaProduto"
+  }
+}
+
+
+resource "aws_api_gateway_method" "pedido_get_list_method" {
+  rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
+  resource_id   = aws_api_gateway_resource.pedido_resource.id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "pedido_get_list_integration" {
+  rest_api_id             = aws_api_gateway_rest_api.api_gateway.id
+  resource_id             = aws_api_gateway_resource.pedido_resource.id
+  http_method             = aws_api_gateway_method.pedido_get_list_method.http_method
+  integration_http_method = "GET"
+  type                    = "HTTP_PROXY"
+  uri                     = "${var.url_base}/pedido"
+}
+
 
 
 resource "aws_api_gateway_deployment" "api_deployment" {
   depends_on = [
-    aws_api_gateway_integration.mock_integration,
-    aws_api_gateway_integration.cliente_post_integration,
     aws_api_gateway_integration.cliente_get_integration,
+    aws_api_gateway_integration.cliente_post_integration,
+    aws_api_gateway_integration.cliente_delete_integration,
     aws_api_gateway_integration.produto_post_integration,
     aws_api_gateway_integration.produto_delete_integration,
-    //aws_api_gateway_integration.produto_get_by_categoria_integration,
     aws_api_gateway_integration.pedido_post_integration,
     aws_api_gateway_integration.pedido_put_status_integration,
-    //aws_api_gateway_integration.pedido_get_list_integration,
-    aws_api_gateway_integration.cliente_delete_integration,
     aws_api_gateway_integration.pagamento_webhook_post_integration,
-    aws_api_gateway_integration.cadastro_usuario_integration
+    aws_api_gateway_integration.produto_get_by_categoria_integration,
+    aws_api_gateway_integration.pedido_get_list_integration
   ]
 
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
