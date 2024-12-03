@@ -59,7 +59,7 @@ resource "aws_api_gateway_method" "usuario_post_method" {
   rest_api_id   = aws_api_gateway_rest_api.api_gateway.id
   resource_id   = aws_api_gateway_resource.usuario_resource.id
   http_method   = "POST"
-  authorization = "NONE"  # Sem autenticação
+  authorization = "NONE" # Sem autenticação
 }
 
 ##Cliente cadastro
@@ -75,7 +75,7 @@ resource "aws_api_gateway_integration" "usuario_post_integration" {
   resource_id             = aws_api_gateway_resource.usuario_resource.id
   http_method             = aws_api_gateway_method.usuario_post_method.http_method
   integration_http_method = "POST"
-  type                    = "AWS_PROXY"  # Usar o proxy para passar diretamente para a função Lambda
+  type                    = "AWS_PROXY" # Usar o proxy para passar diretamente para a função Lambda
   uri                     = "arn:aws:lambda:sa-east-1:307946636040:function:lambda_cadastro_usuarios"
 }
 
