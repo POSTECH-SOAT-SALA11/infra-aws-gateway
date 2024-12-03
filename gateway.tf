@@ -437,7 +437,8 @@ resource "aws_api_gateway_deployment" "api_deployment" {
     aws_api_gateway_integration.pedido_put_status_integration,
     aws_api_gateway_integration.pedido_get_list_integration,
     aws_api_gateway_integration.cliente_delete_integration,
-    aws_api_gateway_integration.pagamento_webhook_post_integration
+    aws_api_gateway_integration.pagamento_webhook_post_integration,
+    aws_api_gateway_integration.cadastro_integration
   ]
 
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
