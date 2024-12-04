@@ -190,10 +190,16 @@ resource "aws_api_gateway_integration" "pedido_put_status_integration" {
   uri                     = "${var.url_base}/pedido/{idPedido}"
 }
 
+resource "aws_api_gateway_resource" "pagamento_resource" {
+  rest_api_id = aws_api_gateway_rest_api.api_gateway.id
+  parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
+  path_part   = "pagamento"
+}
+
 # Pagamento: Webhook
 resource "aws_api_gateway_resource" "pagamento_webhook_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
+  parent_id   = aws_api_gateway_resource.pagamento_resource.id
   path_part   = "webhook"
 }
 
@@ -225,7 +231,7 @@ resource "aws_api_gateway_integration" "pagamento_webhook_post_integration" {
 # Pagamento: Status
 resource "aws_api_gateway_resource" "pagamento_status_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
+  parent_id   = aws_api_gateway_resource.pagamento_resource.id
   path_part   = "status"
 }
 
@@ -254,7 +260,7 @@ resource "aws_api_gateway_integration" "pagamento_status_get_integration" {
 # Pagamento: Efetuar pagamento
 resource "aws_api_gateway_resource" "pagamento_efetuar_pagamento_resource" {
   rest_api_id = aws_api_gateway_rest_api.api_gateway.id
-  parent_id   = aws_api_gateway_rest_api.api_gateway.root_resource_id
+  parent_id   = aws_api_gateway_resource.pagamento_resource.id
   path_part   = "efetuar-pagamento"
 }
 
