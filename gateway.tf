@@ -216,7 +216,7 @@ resource "aws_api_gateway_integration" "pagamento_webhook_post_integration" {
   http_method             = aws_api_gateway_method.pagamento_webhook_post_method.http_method
   integration_http_method = "POST"
   type                    = "HTTP_PROXY"
-  uri                     = "${var.url_base}/webhook"
+  uri                     = "${var.url_base}/pagamento/webhook"
 
   request_templates = {
     "application/json" = <<EOF
@@ -254,7 +254,7 @@ resource "aws_api_gateway_integration" "pagamento_status_get_integration" {
   http_method             = aws_api_gateway_method.pagamento_status_get_method.http_method
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
-  uri                     = "${var.url_base}/status/{idPedido}"
+  uri                     = "${var.url_base}/pagamento/status/{idPedido}"
 }
 
 # Pagamento: Efetuar pagamento
@@ -283,7 +283,7 @@ resource "aws_api_gateway_integration" "pagamento_efetuar_pagamento_get_integrat
   http_method             = aws_api_gateway_method.pagamento_efetuar_pagamento_get_method.http_method
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
-  uri                     = "${var.url_base}/efetuar-pagamento/{idPedido}"
+  uri                     = "${var.url_base}/pagamento/efetuar-pagamento/{idPedido}"
 }
 
 resource "aws_api_gateway_resource" "produto_categoria_resource" {
