@@ -255,6 +255,10 @@ resource "aws_api_gateway_integration" "pagamento_status_get_integration" {
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
   uri                     = "${var.url_base}/pagamento/status/{idPedido}"
+
+  request_parameters = {
+    "method.request.path.idPedido" = true
+  }
 }
 
 # Pagamento: Efetuar pagamento
@@ -284,6 +288,10 @@ resource "aws_api_gateway_integration" "pagamento_efetuar_pagamento_get_integrat
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
   uri                     = "${var.url_base}/pagamento/efetuar-pagamento/{idPedido}"
+
+  request_parameters = {
+    "method.request.path.idPedido" = true
+  }
 }
 
 resource "aws_api_gateway_resource" "produto_categoria_resource" {
