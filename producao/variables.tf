@@ -3,22 +3,20 @@ variable "region" {
   default     = "sa-east-1"
 }
 
-variable "s3_backend_bucket_name" {
-  description = "Nome do bucket S3 para armazenar o estado do Terraform"
-  type        = string
-  default     = "6soat-tfstate"
-}
-
-variable "s3_backend_key" {
-  description = "Nome do key do bucket S3 para armazenar o estado do Terraform"
-  type        = string
-  default     = "api-gateway/terraform.tfstate"
-}
-
 variable "url_base" {
   description = "url base aplicaçao eks"
   type        = string
   default     = "http://k8s-default-ingressa-0faf251d7e-1124737897.sa-east-1.elb.amazonaws.com/avalanches/v1"
+}
+
+variable "rest_api_id" {
+  description = "ID da API Gateway"
+  type        = string
+}
+
+variable "parent_id" {
+  description = "ID do recurso pai para a API"
+  type        = string
 }
 
 variable "lambda_auth_clientes_arn" {
@@ -31,4 +29,19 @@ variable "lambda_auth_funcionarios_arn" {
   description = "ARN da Lambda de autorização para funcionários"
   type        = string
   default     = "arn:aws:lambda:sa-east-1:307946636040:function:lambda_authorizer_funcionarios"
+}
+
+variable "exec_arn" {
+  description = "ID do recurso pai para a API"
+  type        = string
+}
+
+variable "auth_cli_id" {
+  description = "ID do recurso pai para a API"
+  type        = string
+}
+
+variable "auth_func_id" {
+  description = "ID do recurso pai para a API"
+  type        = string
 }
