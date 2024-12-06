@@ -26,7 +26,7 @@ resource "aws_api_gateway_integration" "produto_categoria_id_integration" {
   http_method             = aws_api_gateway_method.produto_categoria_id_method.http_method
   integration_http_method = "GET"
   type                    = "HTTP_PROXY"
-  uri                     = "${var.url_base}/produto/categoria/{categoriaProduto}"
+  uri                     = "${var.url_base}/produto/{categoriaProduto}"
 
   request_parameters = {
     "integration.request.path.categoriaProduto" = "method.request.path.categoriaProduto"
